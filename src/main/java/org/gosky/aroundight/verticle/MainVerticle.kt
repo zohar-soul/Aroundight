@@ -1,4 +1,4 @@
-package org.gosky.kagayaku.verticle
+package org.gosky.aroundight.verticle
 
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.mongo.MongoClient
@@ -7,9 +7,9 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import org.gosky.kagayaku.ext.success
-import org.gosky.kagayaku.http.UploadService
-import org.gosky.kagayaku.model.ResultEntity
+import org.gosky.aroundight.ext.success
+import org.gosky.aroundight.http.UploadService
+import org.gosky.aroundight.model.ResultEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import retrofit2.Call

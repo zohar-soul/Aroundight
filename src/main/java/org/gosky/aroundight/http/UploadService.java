@@ -1,4 +1,4 @@
-package org.gosky.kagayaku.http;
+package org.gosky.aroundight.http;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;

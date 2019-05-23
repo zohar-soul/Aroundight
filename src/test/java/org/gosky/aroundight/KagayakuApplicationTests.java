@@ -1,4 +1,4 @@
-package org.gosky.kagayaku;
+package org.gosky.aroundight;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

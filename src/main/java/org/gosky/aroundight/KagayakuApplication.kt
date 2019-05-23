@@ -1,12 +1,12 @@
-package org.gosky.kagayaku
+package org.gosky.aroundight
 
 import io.vertx.core.Vertx
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.mongo.MongoClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.gosky.kagayaku.http.UploadService
-import org.gosky.kagayaku.verticle.MainVerticle
+import org.gosky.aroundight.http.UploadService
+import org.gosky.aroundight.verticle.MainVerticle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

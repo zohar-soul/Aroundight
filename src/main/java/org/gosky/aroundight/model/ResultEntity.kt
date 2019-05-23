@@ -1,4 +1,4 @@
-package org.gosky.kagayaku.model
+package org.gosky.aroundight.model
 
 /**
  * @Auther: guozhong

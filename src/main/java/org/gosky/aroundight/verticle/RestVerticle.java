@@ -1,4 +1,4 @@
-package org.gosky.kagayaku.verticle;
+package org.gosky.aroundight.verticle;
 
 import java.util.HashSet;
 import java.util.Set;

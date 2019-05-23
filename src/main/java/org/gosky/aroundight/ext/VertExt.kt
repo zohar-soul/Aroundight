@@ -1,4 +1,4 @@
-package org.gosky.kagayaku.ext
+package org.gosky.aroundight.ext
 
 import com.google.gson.Gson
 import io.vertx.ext.web.RoutingContext
