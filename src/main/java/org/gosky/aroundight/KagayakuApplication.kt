@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct
 
 
 @SpringBootApplication
-class KagayakuApplication {
+class AroundightApplication {
 
     @Autowired
     private lateinit var vertx: Vertx
@@ -68,6 +68,6 @@ class KagayakuApplication {
 }
 
 fun main(args: Array<String>) {
-    SpringApplication.run(KagayakuApplication::class.java, *args)
+    SpringApplication.run(AroundightApplication::class.java, *args)
 }
 
