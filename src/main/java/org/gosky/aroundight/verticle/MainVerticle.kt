@@ -1,20 +1,17 @@
 package org.gosky.aroundight.verticle
 
+import io.reactivex.Observable
 import io.vertx.core.json.JsonObject
-import io.vertx.ext.mongo.MongoClient
 import io.vertx.ext.web.RoutingContext
+import io.vertx.reactivex.ext.mongo.MongoClient
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import org.gosky.aroundight.ext.success
 import org.gosky.aroundight.http.UploadService
 import org.gosky.aroundight.model.ResultEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 
 
@@ -34,8 +31,11 @@ class MainVerticle : RestVerticle() {
 
     override fun initRouter() {
         router.get("/api/image/:name").handler { getImage(it) }
-        router.post("/api/upload/smms").handler { smms(it) }
-
+        router.post("/api/upload/:platform").handler { upload(it) }
+//        router.post("/api/upload/juejin").handler { smms(it) }
+        router.errorHandler(500) { routerContext ->
+            routerContext.failure().printStackTrace()
+        }
     }
 
 
@@ -44,55 +44,57 @@ class MainVerticle : RestVerticle() {
         mongo.find("images", JsonObject().put("name", name)) {
             if (it.succeeded()) {
 //                routingContext.reroute(it.result().first().getString("url"))
-                routingContext.response().putHeader("location",it.result().first().getString("url")).setStatusCode(302).end()
+                routingContext.response().putHeader("location", it.result().first().getString("url")).setStatusCode(302).end()
             }
         }
 
     }
 
-    private fun smms(routingContext: RoutingContext) {
+    private fun upload(routingContext: RoutingContext) {
+        val platform = routingContext.pathParam("platform")
 
         val upload = routingContext.fileUploads().first()
 
-        val name = upload.uploadedFileName().replace("file-uploads/","")
+        val name = upload.uploadedFileName().replace("file-uploads/", "")
 
         val body = RequestBody.create(MediaType.parse("multipart/form-data"), File(upload.uploadedFileName()))
-//
-        val part = MultipartBody.Part.createFormData("smfile", upload.uploadedFileName(), body)
 
-        uploadService.smms(part).enqueue(object : Callback<ResponseBody> {
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                t.printStackTrace();
-            }
-
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody?>) {
-                //删除文件
-                File("file-uploads").deleteRecursively()
-
-                val jsonObject = JsonObject(response.body()?.string())
-                if (jsonObject.getString("code") == "success") {
-
-                    val url = jsonObject.getJsonObject("data").getString("url")
-
-                    val document = JsonObject()
-                            .put("name", name)
-                            .put("url", url)
-                            .put("type", "smms")
-
-                    mongo.save("images", document) { res ->
-                        if (res.succeeded()) {
-                            routingContext.success(ResultEntity("success", name))
-                        } else {
-                            println(res.result())
-                        }
-                    }
-
-                } else {
-
-                }
-
-            }
-        })
+        when (platform) {
+            "smms" -> smms(name, body)
+//            "juejin" ->
+            else -> throw RuntimeException("unKnow platform!")
+        }.subscribe {
+            routingContext.success(ResultEntity("success", it))
+        }
 
     }
+
+    private fun smms(fileName: String, requestBody: RequestBody): Observable<String> {
+
+//
+        val part = MultipartBody.Part.createFormData("smfile", fileName, requestBody)
+
+        return uploadService.smms(part)
+                .map { response ->
+                    File("file-uploads").deleteRecursively()
+                    val jsonObject = JsonObject(response.string())
+                    if (jsonObject.getString("code") == "success") {
+                        val url = jsonObject.getJsonObject("data").getString("url")
+
+                        val document = JsonObject()
+                                .put("name", fileName)
+                                .put("url", url)
+                                .put("type", "smms")
+                        return@map document
+                    } else {
+                        throw RuntimeException("smms upload faild!")
+                    }
+                }
+                .flatMap { document ->
+                    return@flatMap mongo.rxSave("images", document).map { document.getString("name") }.toObservable()
+                }
+
+    }
+
+
 }

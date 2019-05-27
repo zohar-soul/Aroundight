@@ -1,8 +1,8 @@
 package org.gosky.aroundight
 
-import io.vertx.core.Vertx
 import io.vertx.core.json.JsonObject
-import io.vertx.ext.mongo.MongoClient
+import io.vertx.reactivex.core.Vertx
+import io.vertx.reactivex.ext.mongo.MongoClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.gosky.aroundight.http.UploadService
@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.annotation.PostConstruct
 
@@ -48,6 +49,7 @@ class AroundightApplication {
         val retrofit = Retrofit.Builder()
                 .baseUrl("http://have.no.baseurl")
                 .client(client)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -59,6 +61,7 @@ class AroundightApplication {
         val config = JsonObject()
                 .put("host", "127.0.0.1")
                 .put("port", 27017)
+
 
         return MongoClient.createShared(vertx, config)
 
