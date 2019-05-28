@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
 
 
@@ -45,6 +46,7 @@ class AroundightApplication {
 
         }
         val client = OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(interceptor).build()
 
         val retrofit = Retrofit.Builder()
