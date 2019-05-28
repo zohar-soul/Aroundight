@@ -1,0 +1,12 @@
+version: '2'
+services:
+  wish-cabin-service:
+    image: zoharsoul/aroundight:latest
+    container_name: aroundight
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xms256m -Xmx512m
+      - logDir=/app/log
+    ports:
+      - "9000:8080"
+    volumes:
+      - /app/log:/app/log
