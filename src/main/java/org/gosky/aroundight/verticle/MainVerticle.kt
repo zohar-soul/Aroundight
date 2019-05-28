@@ -3,6 +3,7 @@ package org.gosky.aroundight.verticle
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.reactivex.ext.mongo.MongoClient
+import mu.KotlinLogging
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import org.gosky.aroundight.ext.success
@@ -18,6 +19,7 @@ import java.io.File
  * @Date: 2019-05-21 11:20
  * @Description:
  */
+private val logger = KotlinLogging.logger {}
 
 @Component
 class MainVerticle : RestVerticle() {
@@ -33,7 +35,7 @@ class MainVerticle : RestVerticle() {
         router.post("/api/upload/:platform").handler { upload(it) }
 //        router.post("/api/upload/juejin").handler { smms(it) }
         router.errorHandler(500) { routerContext ->
-            routerContext.failure().printStackTrace()
+            logger.error { routerContext.failure().message }
         }
     }
 
