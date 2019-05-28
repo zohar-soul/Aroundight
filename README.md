@@ -6,7 +6,7 @@
  
  #### api上传
  
- * /api/upload/:name 
+ * /api/upload/:platform 
  * `:name`目前支持 `juejin`,`souhu`,`sm.ms`
  
  返回结果:
