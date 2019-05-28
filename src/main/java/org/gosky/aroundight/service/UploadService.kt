@@ -42,7 +42,7 @@ class UploadService {
                         val url = jsonObject.getJsonObject("data").getString("url")
 
                         val document = JsonObject()
-                                .put("name", fileName)
+                                .put("uuid", fileName)
                                 .put("url", url)
                                 .put("type", "smms")
                         return@map document
@@ -51,7 +51,7 @@ class UploadService {
                     }
                 }
                 .flatMap { document ->
-                    return@flatMap mongo.rxSave("images", document).map { document.getString("name") }.toObservable()
+                    return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
                 }
 
     }
@@ -71,7 +71,7 @@ class UploadService {
                         val url = jsonObject.getJsonObject("d").getJsonObject("url").getString("https")
 
                         val document = JsonObject()
-                                .put("name", fileName)
+                                .put("uuid", fileName)
                                 .put("url", url)
                                 .put("type", "juejin")
                         return@map document
@@ -80,7 +80,7 @@ class UploadService {
                     }
                 }
                 .flatMap { document ->
-                    return@flatMap mongo.rxSave("images", document).map { document.getString("name") }.toObservable()
+                    return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
                 }
 
     }
@@ -99,14 +99,14 @@ class UploadService {
                     val url = jsonObject.getString("url")
 
                     val document = JsonObject()
-                            .put("name", fileName)
+                            .put("uuid", fileName)
                             .put("url", url)
                             .put("type", "souhu")
                     return@map document
 
                 }
                 .flatMap { document ->
-                    return@flatMap mongo.rxSave("images", document).map { document.getString("name") }.toObservable()
+                    return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
                 }
 
     }

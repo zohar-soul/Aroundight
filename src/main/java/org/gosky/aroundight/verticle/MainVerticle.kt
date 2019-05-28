@@ -29,7 +29,7 @@ class MainVerticle : RestVerticle() {
     private lateinit var uploadService: UploadService
 
     override fun initRouter() {
-        router.get("/api/image/:name").handler { getImage(it) }
+        router.get("/api/image/:uuid").handler { getImage(it) }
         router.post("/api/upload/:platform").handler { upload(it) }
 //        router.post("/api/upload/juejin").handler { smms(it) }
         router.errorHandler(500) { routerContext ->
@@ -39,8 +39,8 @@ class MainVerticle : RestVerticle() {
 
 
     private fun getImage(routingContext: RoutingContext) {
-        val name = routingContext.pathParam("name")
-        mongo.find("images", JsonObject().put("name", name)) {
+        val name = routingContext.pathParam("uuid")
+        mongo.find("images", JsonObject().put("uuid", name)) {
             if (it.succeeded()) {
 //                routingContext.reroute(it.result().first().getString("url"))
                 routingContext.response().putHeader("location", it.result().first().getString("url")).setStatusCode(302).end()
