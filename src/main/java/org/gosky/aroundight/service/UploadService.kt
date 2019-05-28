@@ -101,7 +101,7 @@ class UploadService {
                     val document = JsonObject()
                             .put("name", fileName)
                             .put("url", url)
-                            .put("type", "juejin")
+                            .put("type", "souhu")
                     return@map document
 
                 }

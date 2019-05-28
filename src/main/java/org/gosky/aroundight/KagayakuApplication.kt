@@ -1,6 +1,7 @@
 package org.gosky.aroundight
 
 import io.vertx.core.json.JsonObject
+import io.vertx.ext.mongo.IndexOptions
 import io.vertx.reactivex.core.Vertx
 import io.vertx.reactivex.ext.mongo.MongoClient
 import okhttp3.OkHttpClient
@@ -62,8 +63,10 @@ class AroundightApplication {
                 .put("host", "127.0.0.1")
                 .put("port", 27017)
 
+        val mongoClient = MongoClient.createShared(vertx, config)
 
-        return MongoClient.createShared(vertx, config)
+        mongoClient.rxCreateIndexWithOptions("images", JsonObject().put("name", 1).put("type", 1), IndexOptions().unique(true)).subscribe()
+        return mongoClient
 
     }
 
