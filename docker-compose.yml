@@ -6,6 +6,7 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=-Xms256m -Xmx512m
       - logDir=/app/log
+      - mongo.host=mongo
     ports:
       - "9000:8080"
     volumes:
