@@ -39,6 +39,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     implementation 'io.vertx:vertx-mongo-client:3.7.1'
     implementation 'io.vertx:vertx-rx-java2:3.7.1'
+    implementation 'io.github.microutils:kotlin-logging:1.6.24'
+
 }
 
 compileKotlin {
