@@ -5,7 +5,7 @@ import io.vertx.reactivex.core.Vertx
 import io.vertx.reactivex.ext.mongo.MongoClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.gosky.aroundight.http.UploadService
+import org.gosky.aroundight.http.UploadApi
 import org.gosky.aroundight.verticle.MainVerticle
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
@@ -38,7 +38,7 @@ class AroundightApplication {
     }
 
     @Bean
-    fun retrofit(): UploadService {
+    fun retrofit(): UploadApi {
         val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
 
@@ -53,7 +53,7 @@ class AroundightApplication {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-        return retrofit.create(UploadService::class.java)
+        return retrofit.create(UploadApi::class.java)
     }
 
     @Bean

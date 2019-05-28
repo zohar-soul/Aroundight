@@ -1,15 +1,13 @@
 package org.gosky.aroundight.verticle
 
-import io.reactivex.Observable
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.RoutingContext
 import io.vertx.reactivex.ext.mongo.MongoClient
 import okhttp3.MediaType
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.gosky.aroundight.ext.success
-import org.gosky.aroundight.http.UploadService
 import org.gosky.aroundight.model.ResultEntity
+import org.gosky.aroundight.service.UploadService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.io.File
@@ -25,9 +23,10 @@ import java.io.File
 class MainVerticle : RestVerticle() {
 
     @Autowired
-    private lateinit var uploadService: UploadService
-    @Autowired
     private lateinit var mongo: MongoClient
+
+    @Autowired
+    private lateinit var uploadService: UploadService
 
     override fun initRouter() {
         router.get("/api/image/:name").handler { getImage(it) }
@@ -60,39 +59,12 @@ class MainVerticle : RestVerticle() {
         val body = RequestBody.create(MediaType.parse("multipart/form-data"), File(upload.uploadedFileName()))
 
         when (platform) {
-            "smms" -> smms(name, body)
-//            "juejin" ->
+            "smms" -> uploadService.smms(name, body)
+            "juejin" -> uploadService.juejin(name, body)
             else -> throw RuntimeException("unKnow platform!")
         }.subscribe {
             routingContext.success(ResultEntity("success", it))
         }
-
-    }
-
-    private fun smms(fileName: String, requestBody: RequestBody): Observable<String> {
-
-//
-        val part = MultipartBody.Part.createFormData("smfile", fileName, requestBody)
-
-        return uploadService.smms(part)
-                .map { response ->
-                    File("file-uploads").deleteRecursively()
-                    val jsonObject = JsonObject(response.string())
-                    if (jsonObject.getString("code") == "success") {
-                        val url = jsonObject.getJsonObject("data").getString("url")
-
-                        val document = JsonObject()
-                                .put("name", fileName)
-                                .put("url", url)
-                                .put("type", "smms")
-                        return@map document
-                    } else {
-                        throw RuntimeException("smms upload faild!")
-                    }
-                }
-                .flatMap { document ->
-                    return@flatMap mongo.rxSave("images", document).map { document.getString("name") }.toObservable()
-                }
 
     }
 
