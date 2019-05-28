@@ -61,6 +61,7 @@ class MainVerticle : RestVerticle() {
         when (platform) {
             "smms" -> uploadService.smms(name, body)
             "juejin" -> uploadService.juejin(name, body)
+            "souhu" -> uploadService.souhu(name, body)
             else -> throw RuntimeException("unKnow platform!")
         }.subscribe {
             routingContext.success(ResultEntity("success", it))

@@ -2,6 +2,7 @@ package org.gosky.aroundight.service
 
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import io.vertx.core.impl.StringEscapeUtils
 import io.vertx.core.json.JsonObject
 import io.vertx.reactivex.ext.mongo.MongoClient
 import okhttp3.MultipartBody
@@ -33,6 +34,7 @@ class UploadService {
         val part = MultipartBody.Part.createFormData("smfile", fileName, requestBody)
 
         return uploadApi.smms(part)
+                .subscribeOn(Schedulers.io())
                 .map { response ->
                     File("file-uploads").deleteRecursively()
                     val jsonObject = JsonObject(response.string())
@@ -76,6 +78,32 @@ class UploadService {
                     } else {
                         throw RuntimeException("smms upload faild!")
                     }
+                }
+                .flatMap { document ->
+                    return@flatMap mongo.rxSave("images", document).map { document.getString("name") }.toObservable()
+                }
+
+    }
+
+    fun souhu(fileName: String, requestBody: RequestBody): Observable<String> {
+
+//
+        val part = MultipartBody.Part.createFormData("file", fileName, requestBody)
+
+        return uploadApi.souhu(part)
+                .subscribeOn(Schedulers.io())
+                .map { response ->
+                    File("file-uploads").deleteRecursively()
+                    val jsonObject = JsonObject(StringEscapeUtils.unescapeJava(response.string()).let { it.substring(1, it.length - 1) })
+
+                    val url = jsonObject.getString("url")
+
+                    val document = JsonObject()
+                            .put("name", fileName)
+                            .put("url", url)
+                            .put("type", "juejin")
+                    return@map document
+
                 }
                 .flatMap { document ->
                     return@flatMap mongo.rxSave("images", document).map { document.getString("name") }.toObservable()

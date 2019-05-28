@@ -20,4 +20,9 @@ public interface UploadApi {
     @Headers("User-Agent: PostmanRuntime/7.11.0")
     Observable<ResponseBody> juejin(@Part MultipartBody.Part file);
 
+    @POST("http://changyan.sohu.com/api/2/comment/attachment")
+    @Multipart
+    @Headers("User-Agent: PostmanRuntime/7.11.0")
+    Observable<ResponseBody> souhu(@Part MultipartBody.Part file);
+
 }
