@@ -29,7 +29,7 @@ class MongoDbConfig {
         val config = JsonObject()
                 .put("host", host)
                 .put("port", 27017)
-
+        println("host: " + host)
         val mongoClient = MongoClient.createShared(vertx, config)
 
         mongoClient.rxCreateIndexWithOptions("images", JsonObject().put("name", 1).put("type", 1), IndexOptions().unique(true)).subscribe()
