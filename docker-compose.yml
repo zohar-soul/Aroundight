@@ -10,3 +10,9 @@ services:
       - "9000:8080"
     volumes:
       - /app/log:/app/log
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - $PWD/aroundight/db:/data/db
