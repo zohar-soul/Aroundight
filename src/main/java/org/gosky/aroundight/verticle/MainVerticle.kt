@@ -31,6 +31,7 @@ class MainVerticle : RestVerticle() {
     private lateinit var uploadService: UploadService
 
     override fun initRouter() {
+        router.get("/health").handler { it.success("ok!") }
         router.get("/api/image/:uuid").handler { getImage(it) }
         router.post("/api/upload/:platform").handler { upload(it) }
 //        router.post("/api/upload/juejin").handler { smms(it) }
