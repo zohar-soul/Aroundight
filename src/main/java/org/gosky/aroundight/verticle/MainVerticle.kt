@@ -69,7 +69,7 @@ class MainVerticle : RestVerticle() {
         }.flatMap { document ->
             return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
         }.subscribe {
-            routingContext.success(ResultEntity("success", "http://http://aroundight.gosky.xyz/api/image/$it"))
+            routingContext.success(ResultEntity("success", "http://aroundight.gosky.xyz/api/image/$it"))
         }
 
     }
