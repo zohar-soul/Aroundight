@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Request Meta">
+    <meta name="keywords" content="requestbin,requestMeta,webhook">
+    <title> Aroundight </title>
+    <link href="https://unpkg.com/nes.css@2.1.0/css/nes.min.css" rel="stylesheet" />
+    <link href="static/dialog-polyfill/dialog-polyfill.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" class="ui" href="static/container.min.css">
+    <link rel="stylesheet" type="text/css" class="ui" href="static/web.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+    <link rel="manifest" href="static/favicon/site.webmanifest">
+    <link rel="mask-icon" href="static/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    
+<style>.container {
+      height: 100%;
+    }
+    dialog {
+      box-sizing: content-box;
+    }
+
+    .nes-radio {
+        display: none;
+        -webkit-appearance: radio!important;
+        -moz-appearance: ratio!important;
+        appearance: ratio!important;
+    }
+
+    .field label span {
+        margin-left: 25px;
+    }
+
+
+    button.is-disabled {
+      pointer-events: none!important;
+    }
+
+    .form .field {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      height: 52px;
+    }
+
+    menu.dialog-menu {
+      padding-left: 0px;
+      text-align: center;
+    }
+
+
+    .removefile {
+      z-index: 100;
+    }
+
+    label.header {
+      color: #f7d51d;
+      font-weight: bold;
+      max-width: 250px;
+      width: 40%;
+      text-align: right;
+      padding-right: 16px;
+    }
+
+    #output {
+      max-width: 100%;
+      padding: 16px;
+      border-radius: 5px;
+      color: #404040;
+      font-size: 16px;
+      overflow: auto;
+      line-height: 1.8;
+    }
+
+    .nes-container.is-warning {
+      color: #212529;
+      background-color: #f7d51d;
+    }
+
+    #output.light {
+      color: #404040;
+    }
+    
+    #output.dark {
+      color: #fff;
+    }
+
+    #output.width80 {
+        font-size: 12px;
+    }
+
+    #output.width60 {
+        font-size: 14px;
+    }
+
+    @media only screen and (max-width: 767px) {
+      .nes-container {
+        font-size: 12px;
+        padding: 1.5rem 8px;
+      }
+
+      .ui.container {
+        margin-left: .5em!important;
+        margin-right: .5em!important;
+      }
+
+      label.header {
+        padding-right: 8px;
+      }
+
+      #output-wrapper {
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+      }
+
+      #output.light, #output.dark {
+        padding: 0px;
+        font-size: 12px!important;
+      }
+    }
+</style>
+
+    <style>.hidden {
+      display: none;
+    }
+    .nes-octocat::before {
+        color: #f77702;
+    }
+
+    .logo {
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .logo img {
+        max-height: 120px;
+        width: auto;
+    }
+
+    @media only screen and (max-width: 767px) {
+        .logo img {
+            width: 100%;
+        }
+    }
+
+     @keyframes wave {
+  50% {
+    width: 6px;
+    height: 6px;
+    color: #f77702;
+    box-shadow: 24px 6px,78px 6px,24px 12px,30px 12px,72px 12px,78px 12px,24px 18px,30px 18px,36px 18px,42px 18px,48px 18px,54px 18px,60px 18px,66px 18px,72px 18px,78px 18px,18px 24px,24px 24px,30px 24px,36px 24px,42px 24px,48px 24px,54px 24px,60px 24px,66px 24px,72px 24px,78px 24px,84px 24px,18px 30px,24px 30px,30px 30px,36px 30px,42px 30px,48px 30px,54px 30px,60px 30px,66px 30px,72px 30px,78px 30px,84px 30px,18px 36px,24px 36px,30px 36px,36px 36px#ffdec4,42px 36px#ffdec4,48px 36px#ffdec4,54px 36px#ffdec4,60px 36px#ffdec4,66px 36px#ffdec4,72px 36px,78px 36px,84px 36px,18px 42px,24px 42px,30px 42px#ffdec4,36px 42px#ffdec4,42px 42px#ffdec4,48px 42px#ffdec4,54px 42px#ffdec4,60px 42px#ffdec4,66px 42px#ffdec4,72px 42px#ffdec4,78px 42px,84px 42px,12px 48px,18px 48px,24px 48px,30px 48px#ffdec4,36px 48px#cb7066,42px 48px#ffdec4,48px 48px#ffdec4,54px 48px#ffdec4,60px 48px#ffdec4,66px 48px#cb7066,72px 48px#ffdec4,78px 48px,84px 48px,12px 54px,24px 54px,30px 54px,36px 54px#ffdec4,42px 54px#ffdec4,48px 54px#cb7066,54px 54px#cb7066,60px 54px#ffdec4,66px 54px#ffdec4,72px 54px,78px 54px,18px 60px,42px 60px,48px 60px,54px 60px,60px 60px,24px 66px,36px 66px,42px 66px,48px 66px,54px 66px,60px 66px,66px 66px,24px 72px,30px 72px,36px 72px,42px 72px,48px 72px,54px 72px,60px 72px,66px 72px,36px 78px,48px 78px,54px 78px,66px 78px,36px 84px,48px 84px,54px 84px,66px 84px,30px 90px,42px 90px,60px 90px,72px 90px;
+    @-moz-document url-prefix() {
+      -webkit-box-shadow: 24px 6px0 0.020px,78px 6px0 0.020px,24px 12px0 0.020px,30px 12px0 0.020px,72px 12px0 0.020px,78px 12px0 0.020px,24px 18px0 0.020px,30px 18px0 0.020px,36px 18px0 0.020px,42px 18px0 0.020px,48px 18px0 0.020px,54px 18px0 0.020px,60px 18px0 0.020px,66px 18px0 0.020px,72px 18px0 0.020px,78px 18px0 0.020px,18px 24px0 0.020px,24px 24px0 0.020px,30px 24px0 0.020px,36px 24px0 0.020px,42px 24px0 0.020px,48px 24px0 0.020px,54px 24px0 0.020px,60px 24px0 0.020px,66px 24px0 0.020px,72px 24px0 0.020px,78px 24px0 0.020px,84px 24px0 0.020px,18px 30px0 0.020px,24px 30px0 0.020px,30px 30px0 0.020px,36px 30px0 0.020px,42px 30px0 0.020px,48px 30px0 0.020px,54px 30px0 0.020px,60px 30px0 0.020px,66px 30px0 0.020px,72px 30px0 0.020px,78px 30px0 0.020px,84px 30px0 0.020px,18px 36px0 0.020px,24px 36px0 0.020px,30px 36px0 0.020px,36px 36px0 0.020px #ffdec4,42px 36px0 0.020px #ffdec4,48px 36px0 0.020px #ffdec4,54px 36px0 0.020px #ffdec4,60px 36px0 0.020px #ffdec4,66px 36px0 0.020px #ffdec4,72px 36px0 0.020px,78px 36px0 0.020px,84px 36px0 0.020px,18px 42px0 0.020px,24px 42px0 0.020px,30px 42px0 0.020px #ffdec4,36px 42px0 0.020px #ffdec4,42px 42px0 0.020px #ffdec4,48px 42px0 0.020px #ffdec4,54px 42px0 0.020px #ffdec4,60px 42px0 0.020px #ffdec4,66px 42px0 0.020px #ffdec4,72px 42px0 0.020px #ffdec4,78px 42px0 0.020px,84px 42px0 0.020px,12px 48px0 0.020px,18px 48px0 0.020px,24px 48px0 0.020px,30px 48px0 0.020px #ffdec4,36px 48px0 0.020px #cb7066,42px 48px0 0.020px #ffdec4,48px 48px0 0.020px #ffdec4,54px 48px0 0.020px #ffdec4,60px 48px0 0.020px #ffdec4,66px 48px0 0.020px #cb7066,72px 48px0 0.020px #ffdec4,78px 48px0 0.020px,84px 48px0 0.020px,12px 54px0 0.020px,24px 54px0 0.020px,30px 54px0 0.020px,36px 54px0 0.020px #ffdec4,42px 54px0 0.020px #ffdec4,48px 54px0 0.020px #cb7066,54px 54px0 0.020px #cb7066,60px 54px0 0.020px #ffdec4,66px 54px0 0.020px #ffdec4,72px 54px0 0.020px,78px 54px0 0.020px,18px 60px0 0.020px,42px 60px0 0.020px,48px 60px0 0.020px,54px 60px0 0.020px,60px 60px0 0.020px,24px 66px0 0.020px,36px 66px0 0.020px,42px 66px0 0.020px,48px 66px0 0.020px,54px 66px0 0.020px,60px 66px0 0.020px,66px 66px0 0.020px,24px 72px0 0.020px,30px 72px0 0.020px,36px 72px0 0.020px,42px 72px0 0.020px,48px 72px0 0.020px,54px 72px0 0.020px,60px 72px0 0.020px,66px 72px0 0.020px,36px 78px0 0.020px,48px 78px0 0.020px,54px 78px0 0.020px,66px 78px0 0.020px,36px 84px0 0.020px,48px 84px0 0.020px,54px 84px0 0.020px,66px 84px0 0.020px,30px 90px0 0.020px,42px 90px0 0.020px,60px 90px0 0.020px,72px 90px0 0.020px;
+    }
+  }
+}
+    .github-link {
+  justify-content: center;
+  display: flex;
+  height: 100px;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.github-link.active {
+  right: 10px;
+}
+.github-link:hover {
+  text-decoration: none;
+}
+.github-link > p.nes-balloon {
+  align-self: flex-start;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  color: #333;
+}
+.github-link > i.nes-octocat {
+  align-self: flex-end;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="ui container">
+      <div class="nes-container is-dark" style="text-align: center; color: #f77702;">
+        <a href="index.html">
+            Aroundight
+          <!-- <img style="height: 40px;" src="static/j2a-logo.png"> -->
+        </a>
+      </div>
+      <div class="logo">
+        <img src="static/logo.png">
+      </div>
+      
+
+      <div class="nes-container is-rounded with-title" style="padding: 16px 8px;">
+        <p class="title">Form</p>
+        <div class="ui form">
+          <div class="field">
+            <label for="jpg" class="header">image</label>
+            <button id="uploadJPEGHandle" class="nes-btn " style="margin-right: 16px; margin-left: 10px;">
+                Choose
+            </button>
+            <input id="jpg" name="jpg" type="file" style="display: none">
+            <i class="nes-icon removefile hidden close"></i>
+          </div>
+          <div class="field">
+            <label class="header">ImageSource</label>
+            <label>
+              <input style="margin-left: -16px;" type="radio" class="bg nes-radio" name="bg" value="juejin" checked="">
+              <span>JueJin</span>
+            </label>
+            <label>
+              <input type="radio" class="bg nes-radio" name="bg" value="souhu">
+              <span>Souhu</span>
+            </label>
+            <label>
+              <input type="radio" class="bg nes-radio" name="bg" value="smms">
+              <span>Smms</span>
+            </label>
+          </div>
+          <!-- <div class="field">
+            <label class="header">Colors</label>
+            <label>
+              <input type="radio" class="colors nes-radio" name="colors" value="html" checked="">
+              <span>HTML</span>
+            </label>
+            <label>
+              <input type="radio" class="colors nes-radio" name="colors" value="ansi">
+              <span>ANSI</span>
+            </label>
+            <label>
+              <input type="radio" class="colors nes-radio" name="colors" value="no">
+              <span>No</span>
+            </label>
+          </div> -->
+          <!-- <div class="field">
+            <label class="header">Width</label>
+            <label>
+              <input type="radio" class="width nes-radio" name="width" value="80" checked="">
+              <span>80</span>
+            </label>
+            <label>
+              <input type="radio" class="width nes-radio" name="width" value="60">
+              <span>60</span>
+            </label>
+            <label>
+              <input type="radio" class="width nes-radio" name="width" value="40">
+              <span>40</span>
+            </label>
+          </div> -->
+        </div>
+      
+        <div class="">
+          <button id="upload-button" type="button" class="nes-btn is-disabled">
+              <i class="nes-icon coin" style="width: 0; height: 0; transform: scale(1);"></i> 
+              <span class="process">Process</span>
+          </button>
+          
+          <button id="copy-button" type="button" class="nes-btn copy-btn is-success" data-clipboard-text="">Copy</button>
+          
+          
+        </div>
+      </div>
+
+<dialog class="nes-dialog is-dark" id="dialog-copy">
+  <form method="dialog">
+    <p class="title">
+      <a href="#" class="nes-badge">
+        <span class="is-warning"><i class="nes-icon coin" style="width: 0; height: 0; transform: scale(1);"></i> + 10000</span>
+      </a>
+    </p>
+    <p>Copy successfully.</p>
+    <button id="close" class="nes-btn is-primary">Close</button>
+
+  </form>
+</dialog>
+
+<div style="text-align: center; margin-top: 30px;">
+    <button id="show-image" type="button" class="nes-btn hidden is-warning">Show JPEG</button>
+    <button id="hidden-image" type="button" class="nes-btn hidden is-warning">Hidden JPEG</button>
+    <a href="index.html" id="share" type="button" class="nes-btn  hidden is-warning" >Share</a>
+</div>
+
+
+<div id="image-wrapper" class="nes-container hidden is-rounded with-title" style="margin-top: 30px; text-align: center;">
+  <p class="title">Image</p>
+  <img style="max-width: 100%;" id="image" src="static/logo.png">
+</div>
+
+<div id="output-wrapper" class="nes-container is-rounded with-title" style="margin-top: 30px; text-align: center;">
+  <p class="title">Output</p>
+  <pre id="output">:) Hello, Please choose and upload an image(*jpeg).</pre>
+  <textarea class="hidden" type="text" id="copy-result"></textarea>
+</div>
+
+
+
+        
+      <div class="nes-container is-dark" style="margin-top: 30px;">
+      <a href="https://github.com/zohar-soul/Aroundight" target="_blank" rel="noopener" class="github-link active"><p class="nes-balloon from-right">:) Fork me<br>on GitHub</p> <i class="nes-octocat animate"></i></a>
+</div>
+    </div>
+  </body>
+  <script src="https://unpkg.com/jquery@2.2.4/dist/jquery.min.js"></script>
+  <script src="static/reconnecting-websocket.min.js"></script>
+  <script src="static/dialog-polyfill/dialog-polyfill.js"></script>
+  <script src="static/clipboard.min.js"></script>
+  <script src="static/ansi.js"></script>
+  
+<script>
+  var wsScheme = window.location.protocol == "https:" ? "wss" : "ws";
+  // var ws = new ReconnectingWebSocket(wsScheme + "://"+location.host+"/ws");
+  var filename;
+  
+  // ws.onopen = function (event) {
+    
+  // }
+  
+  // ws.onmessage = function(event) {
+  //     var data = JSON.parse(event.data);
+  
+  //     if (data.type === 'upload') {
+  //       // Upload complate;
+  //       $('#upload-button').removeClass('is-disabled');
+  //       $('#upload-button').addClass('is-warning');
+  //     }
+  
+  //     var ansi_up = new AnsiUp;
+  //     var classNames = data.class || '';
+  //     var output = data.output
+  //     var outputText = data.output
+  
+  
+  //     if ('filename' in data) {
+  //         filename = data.filename;
+  //         $('#image').attr('src', '/static/images/' + filename + '.jpeg')
+  //         $('#share').attr('href', '/' + filename)
+  //         $('#share').removeClass('hidden');
+  //         $('#show-image').removeClass('hidden');
+  //         $('#hidden-image').addClass('hidden');
+  //         $('#image-wrapper').addClass('hidden');
+  //         $('#uploadJPEGHandle').html('image.jpeg');
+  //     }
+  
+  //     if (classNames.includes('ansi')) {
+  //         output = ansi_up.ansi_to_html(data.output)
+  //     } 
+  
+  //     if (classNames.includes('html')) {
+  //         outputText = $(output.replace(/\<br\>/g, '\n')).text()
+  //     }
+  
+  //     $('#upload-button .process').html("Process")
+  //     $('#upload-button').removeClass("is-disabled");
+  //     $('#output').html(output);
+  //     $('#copy-result').val(output);
+  
+  //     $('#copy-button').attr('data-clipboard-text', outputText);
+  //     $('#output').attr('class', classNames);
+  
+  //     classNames = classNames.replace('dark', 'is-dark');
+  //     $('#output-wrapper').attr('class', "nes-container is-rounded with-title " + classNames);
+  // };
+  function ImageUpLoad(file){
+    // if (data.type === 'upload') {
+    //   // Upload complate;
+    //   $('#upload-button').removeClass('is-disabled');
+    //   $('#upload-button').addClass('is-warning');
+    // }
+    $('#upload-button .process').html("Process")
+    $('#upload-button').removeClass("is-disabled");
+    
+      
+  }
+  function sendMessage(file) {
+    var bg = $('input.bg:checked').val();
+    var width = $('input.width:checked').val();
+    var colors = $('input.colors:checked').val();
+  
+    var data = new FormData()
+    data.append('file',file)
+  
+    $.ajax({  
+        url: "http://aroundight.gosky.xyz/api/upload/"+bg, 
+        type: 'POST',  
+        data: data,  
+        dataType: 'JSON',  
+        cache: false,  
+        processData: false,  
+        contentType: false  
+    }).done(function(res){  
+        console.log(res,'res')
+        if(res['code']=='success'){
+          $('#output').html("<img src="+res.url+" />");
+          $('#copy-result').val(res.url);
+          $('#upload-button .process').html("Process")
+          $('#upload-button').removeClass("is-disabled");
+        }
+    }); 
+    // ws.send(JSON.stringify({"background": bg, "width": width, colors: colors, filename: filename}))
+  }
+  
+  
+  $(document).ready(function() {
+    // Initalize dialog
+    var dialog = document.querySelector('#dialog-copy');
+    dialogPolyfill.registerDialog(dialog);
+  
+    var clipboard = new ClipboardJS('.copy-btn');
+  
+    clipboard.on('success', function(e) {
+      dialog.showModal()
+    });
+  
+    $('#show-image').on('click', function () {
+      $('#image-wrapper').removeClass('hidden');
+      $('#hidden-image').removeClass('hidden');
+      $('#show-image').addClass('hidden');
+    })
+  
+    $('#hidden-image').on('click', function () {
+      $('#image-wrapper').addClass('hidden');
+      $('#hidden-image').addClass('hidden');
+      $('#show-image').removeClass('hidden');
+    })
+  
+  
+    $('#upload-button').on('click', function () {
+      $('#upload-button .process').html("Processing..")
+      $('#upload-button').addClass("is-disabled");
+      sendMessage($('#jpg')[0].files[0])
+    })
+  
+    // $('#copy-button').on('change', function () {
+    //   let copyResultInput = document.querySelector('#copy-result')
+    //   copyResultInput.setAttribute('class', '')    // 不是 hidden 才能複製
+    //   copyResultInput.select()
+  
+    //   try {
+    //     document.execCommand('copy');
+    //   } catch (err) {
+    //     console.log("copy error")
+    //   }
+    //   copyResultInput.setAttribute('class', 'hidden')
+    //   window.getSelection().removeAllRanges()
+  
+    //   dialog.showModal()
+    // })
+  
+  
+    $('.removefile').on('click', function (e) {
+      
+  
+      $('#uploadJPEGHandle').html('Choose')
+      $('.removefile').addClass('hidden')
+      $('#jpg').val('');
+  
+      $('#upload-button').addClass('is-disabled');
+      $('#upload-button').removeClass('is-primary');
+    })
+  
+    $('#jpg').on('change', function (e) {
+      $('.removefile').removeClass('hidden');
+  
+      // upload file 
+      var file = $('#jpg')[0].files[0];
+      if (file.size > 2000000) {
+          $('#output').html("文件 太 大( >2m ).")
+          return 
+      }
+      $('#uploadJPEGHandle').html("Uploading...")
+      // ws.send(file)
+      ImageUpLoad(file)
+    })
+  
+    $('#uploadJPEGHandle').on('click', function (e) {
+      $('#jpg').trigger("click");
+    })
+  
+  
+  });
+</script>
+
+  <script>
+    document.addEventListener('scroll', () => {
+      var scrollPos = document.documentElement.scrollTop || document.body.scrollTop;
+      
+      if (scrollPos > 200) {
+        $('.github-link').addClass('hidden');
+      } else {
+        $('.github-link').removeClass('hidden');
+      }
+    });
+  </script>
+</html>
