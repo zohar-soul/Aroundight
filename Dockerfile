@@ -13,6 +13,6 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 EXPOSE 9000
 
 COPY --from=build-env /app/build/libs/aroundight-0.0.1-SNAPSHOT.jar /app/bin/aroundight.jar
-COPY --from=build-env /app/www /app/www
+COPY --from=build-env /app/www/ /app/www/
 CMD ["java", "-jar", "/app/bin/aroundight.jar"]
 
