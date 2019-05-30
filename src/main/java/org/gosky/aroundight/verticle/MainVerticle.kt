@@ -67,7 +67,7 @@ class MainVerticle : RestVerticle() {
             "souhu" -> uploadService.souhu(name, body)
             else -> throw RuntimeException("unKnow platform!")
         }.subscribe {
-            routingContext.success(ResultEntity("success", it))
+            routingContext.success(ResultEntity("success", "http://http://aroundight.gosky.xyz/api/image/$it"))
         }
 
     }
