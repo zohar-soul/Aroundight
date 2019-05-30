@@ -28,7 +28,7 @@ class UploadService {
     @Autowired
     private lateinit var mongo: MongoClient
 
-    fun smms(fileName: String, requestBody: RequestBody): Observable<String> {
+    fun smms(fileName: String, requestBody: RequestBody): Observable<JsonObject> {
 
 //
         val part = MultipartBody.Part.createFormData("smfile", fileName, requestBody)
@@ -50,14 +50,12 @@ class UploadService {
                         throw RuntimeException("smms upload faild!")
                     }
                 }
-                .flatMap { document ->
-                    return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
-                }
+
 
     }
 
 
-    fun juejin(fileName: String, requestBody: RequestBody): Observable<String> {
+    fun juejin(fileName: String, requestBody: RequestBody): Observable<JsonObject> {
 
 //
         val part = MultipartBody.Part.createFormData("file", fileName, requestBody)
@@ -79,13 +77,10 @@ class UploadService {
                         throw RuntimeException("smms upload faild!")
                     }
                 }
-                .flatMap { document ->
-                    return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
-                }
 
     }
 
-    fun souhu(fileName: String, requestBody: RequestBody): Observable<String> {
+    fun souhu(fileName: String, requestBody: RequestBody): Observable<JsonObject> {
 
 //
         val part = MultipartBody.Part.createFormData("file", fileName, requestBody)
@@ -105,9 +100,7 @@ class UploadService {
                     return@map document
 
                 }
-                .flatMap { document ->
-                    return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
-                }
+
 
     }
 }

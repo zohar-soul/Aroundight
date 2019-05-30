@@ -66,6 +66,8 @@ class MainVerticle : RestVerticle() {
             "juejin" -> uploadService.juejin(name, body)
             "souhu" -> uploadService.souhu(name, body)
             else -> throw RuntimeException("unKnow platform!")
+        }.flatMap { document ->
+            return@flatMap mongo.rxSave("images", document).map { document.getString("uuid") }.toObservable()
         }.subscribe {
             routingContext.success(ResultEntity("success", "http://http://aroundight.gosky.xyz/api/image/$it"))
         }

@@ -34,7 +34,7 @@ class MongoDbConfig {
         logger.info { ("host: " + host) }
         val mongoClient = MongoClient.createShared(vertx, config)
 
-        mongoClient.rxCreateIndexWithOptions("images", JsonObject().put("name", 1).put("type", 1), IndexOptions().unique(true)).subscribe()
+        mongoClient.rxCreateIndexWithOptions("images", JsonObject().put("uuid", 1).put("type", 1), IndexOptions().unique(true)).subscribe()
         return mongoClient
 
     }
